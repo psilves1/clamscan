@@ -22,7 +22,8 @@ const { type } = require('os');
         },
         clamscan: {
             path: '/usr/local/bin/clamscan',
-            scanPdf: false
+            scanPdf: false,
+            maxScanTime:120000
         },
         preference: 'clamscan'
     });

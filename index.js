@@ -443,8 +443,7 @@ class NodeClam {
                 'db' in settings.clamscan &&
                 settings.clamscan.db &&
                 typeof settings.clamscan.db === 'string'
-            )
-                flagsArray.push(`--database=${settings.clamscan.db}`);
+            ) flagsArray.push(`--database=${settings.clamscan.db}`);
     
             // Scan archives
             if (settings.clamscan.scanArchives === true) {
@@ -617,7 +616,78 @@ class NodeClam {
                 flagsArray.push(`--alert-encrypted=${settings.clamscan.alertEncrypted ? 'yes' : 'no'}`);
             }
     
-            // Add any other flags you want to handle in a similar way
+            // Add the missing flags for max options
+            if (settings.clamscan.maxScanTime) {
+                flagsArray.push(`--max-scantime=${settings.clamscan.maxScanTime}`);
+            }
+    
+            if (settings.clamscan.maxFileSize) {
+                flagsArray.push(`--max-filesize=${settings.clamscan.maxFileSize}`);
+            }
+    
+            if (settings.clamscan.maxScanSize) {
+                flagsArray.push(`--max-scansize=${settings.clamscan.maxScanSize}`);
+            }
+    
+            if (settings.clamscan.maxFiles) {
+                flagsArray.push(`--max-files=${settings.clamscan.maxFiles}`);
+            }
+    
+            if (settings.clamscan.maxRecursion) {
+                flagsArray.push(`--max-recursion=${settings.clamscan.maxRecursion}`);
+            }
+    
+            if (settings.clamscan.maxDirRecursion) {
+                flagsArray.push(`--max-dir-recursion=${settings.clamscan.maxDirRecursion}`);
+            }
+    
+            if (settings.clamscan.maxEmbeddedPe) {
+                flagsArray.push(`--max-embeddedpe=${settings.clamscan.maxEmbeddedPe}`);
+            }
+    
+            if (settings.clamscan.maxHtmlnormalize) {
+                flagsArray.push(`--max-htmlnormalize=${settings.clamscan.maxHtmlnormalize}`);
+            }
+    
+            if (settings.clamscan.maxHtmlnotags) {
+                flagsArray.push(`--max-htmlnotags=${settings.clamscan.maxHtmlnotags}`);
+            }
+    
+            if (settings.clamscan.maxScriptnormalize) {
+                flagsArray.push(`--max-scriptnormalize=${settings.clamscan.maxScriptnormalize}`);
+            }
+    
+            if (settings.clamscan.maxZipTypercg) {
+                flagsArray.push(`--max-ziptypercg=${settings.clamscan.maxZipTypercg}`);
+            }
+    
+            if (settings.clamscan.maxPartitions) {
+                flagsArray.push(`--max-partitions=${settings.clamscan.maxPartitions}`);
+            }
+    
+            if (settings.clamscan.maxIconspe) {
+                flagsArray.push(`--max-iconspe=${settings.clamscan.maxIconspe}`);
+            }
+    
+            if (settings.clamscan.maxRechwp3) {
+                flagsArray.push(`--max-rechwp3=${settings.clamscan.maxRechwp3}`);
+            }
+    
+            if (settings.clamscan.pcreMatchLimit) {
+                flagsArray.push(`--pcre-match-limit=${settings.clamscan.pcreMatchLimit}`);
+            }
+    
+            if (settings.clamscan.pcreRecMatchLimit) {
+                flagsArray.push(`--pcre-recmatch-limit=${settings.clamscan.pcreRecMatchLimit}`);
+            }
+    
+            if (settings.clamscan.pcreMaxFilesize) {
+                flagsArray.push(`--pcre-max-filesize=${settings.clamscan.pcreMaxFilesize}`);
+            }
+    
+            if (settings.clamscan.disableCache !== undefined) {
+                flagsArray.push(`--disable-cache=${settings.clamscan.disableCache ? 'yes' : 'no'}`);
+            }
         }
     
         // Flags specific to clamdscan
@@ -634,8 +704,7 @@ class NodeClam {
                 'configFile' in settings.clamdscan &&
                 settings.clamdscan.configFile &&
                 typeof settings.clamdscan.configFile === 'string'
-            )
-                flagsArray.push(`--config-file=${settings.clamdscan.configFile}`);
+            ) flagsArray.push(`--config-file=${settings.clamdscan.configFile}`);
     
             // Turn on multi-threaded scanning
             if (settings.clamdscan.multiscan === true) flagsArray.push('--multiscan');
@@ -667,9 +736,20 @@ class NodeClam {
         if ('fileList' in settings && settings.fileList && typeof settings.fileList === 'string')
             flagsArray.push(`--file-list=${settings.fileList}`);
     
-        // Build the String
+        // Scan files specified via --file-list
+        if (settings.filesFromList) {
+            flagsArray.push('--file-from-list');
+        }
+    
+        // Add timeout for scanning
+        if (settings.scanTimeout) {
+            flagsArray.push(`--timeout=${settings.scanTimeout}`);
+        }
+    
+        // Return the final flags
         return flagsArray;
     }
+    
 
     /**
      * Create socket connection to a remote(or local) clamav daemon.
@@ -2532,8 +2612,10 @@ class NodeClam {
     }
 
     /**
-     * @description Used to call clamscan CLI command directly
-     * @param {string} pathToBinary is the path to the CLI command you would like to use
+     * @description Used to call clamscan CLI command directly. This is useful if you have files that need a
+     * specific configuration for certain files that differs from the base clamd.conf. You can specify CLI arguments
+     * like MaxScanSize or ScanPDF that are offered by the 'clamscan' command
+     * @param {string} file is the path to the file you would like to scan
      */
     scanWithClamScan(file, hasCb) {
 
