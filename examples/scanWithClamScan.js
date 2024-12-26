@@ -2,7 +2,9 @@
 const axios = require('axios');
 const fs = require('fs');
 
+//switch between these two for happy/sad path testing
 const fakeVirusUrl = 'https://www.eicar.org/download/eicar-com-2/?wpdmdl=8842&refresh=661ef9d576b211713306069';
+const samplePDFUrl = 'https://pdfobject.com/pdf/sample.pdf';
 const tempDir = __dirname;
 const scanFile = `${tempDir}/tmp_file.txt`;
 
