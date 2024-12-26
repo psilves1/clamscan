@@ -6,6 +6,17 @@ const fakeVirusUrl = 'https://www.eicar.org/download/eicar-com-2/?wpdmdl=8842&re
 const tempDir = __dirname;
 const scanFile = `${tempDir}/tmp_file.txt`;
 
+/**
+ * This script demonstrates how to scan a file for viruses without requiring a permanent ClamAV daemon.
+ * It provides an example of configuring the 'clamscan' command for one-time file scans, including downloading
+ * a test virus file from the internet, scanning it with ClamAV, and handling the results.
+ * 
+ * Configuration options for both 'clamscan' and 'clamdscan' are included to showcase different 
+ * scanning setups, such as bypassing certain tests, defining timeouts, and setting file scan preferences.
+ * 
+ * This example uses a test virus file from the EICAR website, which is safe and non-malicious, 
+ * designed to verify that the virus scanning functionality works correctly.
+ */
 
 // Initialize the clamscan module
 const NodeClam = require('../index'); // Offically: require('clamscan');
@@ -19,11 +30,13 @@ const { type } = require('os');
             host: 'localhost',
             port: 3310,
             // socket: '/var/run/clamd.scan/clamd.sock',
+            active: false
         },
         clamscan: {
             path: '/usr/local/bin/clamscan',
             scanPdf: false,
-            maxScanTime:120000
+            maxScanTime: 120000,
+            active: true
         },
         preference: 'clamscan'
     });
@@ -48,7 +61,7 @@ const { type } = require('os');
 
     // Scan the file
     try {
-        const { file, isInfected, viruses } = await clamscan.scanWithClamScan(scanFile);
+        const { file, isInfected, viruses } = await clamscan.isInfected(scanFile);
 
         // If `isInfected` is TRUE, file is a virus!
         if (isInfected === true) {
