@@ -12,11 +12,11 @@ const scanFile = `${tempDir}/tmp_file.txt`;
  * This script demonstrates how to scan a file for viruses without requiring a permanent ClamAV daemon.
  * It provides an example of configuring the 'clamscan' command for one-time file scans, including downloading
  * a test virus file from the internet, scanning it with ClamAV, and handling the results.
- * 
- * Configuration options for both 'clamscan' and 'clamdscan' are included to showcase different 
+ *
+ * Configuration options for both 'clamscan' and 'clamdscan' are included to showcase different
  * scanning setups, such as bypassing certain tests, defining timeouts, and setting file scan preferences.
- * 
- * This example uses a test virus file from the EICAR website, which is safe and non-malicious, 
+ *
+ * This example uses a test virus file from the EICAR website, which is safe and non-malicious,
  * designed to verify that the virus scanning functionality works correctly.
  */
 
@@ -32,24 +32,24 @@ const { type } = require('os');
             host: 'localhost',
             port: 3310,
             // socket: '/var/run/clamd.scan/clamd.sock',
-            active: false
+            active: false,
         },
         clamscan: {
             path: '/usr/local/bin/clamscan',
             scanPdf: false,
             maxScanTime: 120000,
-            active: true
+            active: true,
         },
-        preference: 'clamdscan'
+        preference: 'clamdscan',
     });
-    
+
     let body;
 
     // Request a test file from the internet...
     try {
         body = await axios.get(fakeVirusUrl, {
-            responseType: 'arraybuffer',  // Ensure the file is returned as binary data
-          });
+            responseType: 'arraybuffer', // Ensure the file is returned as binary data
+        });
         //console.log(JSON.stringify(body.data))
     } catch (err) {
         if (err.response) console.error(`${err.response.status}: Request Failed. `, err.response.data);

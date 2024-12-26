@@ -402,7 +402,6 @@ class NodeClam {
      * this._buildClamArgs('--version');
      */
     _buildClamArgs(item) {
-
         let args = this.clamFlags.slice();
 
         if (typeof item === 'string') args.push(item);
@@ -424,18 +423,18 @@ class NodeClam {
      */
     _buildClamFlags(scanner, settings) {
         const flagsArray = ['--no-summary'];
-    
+
         // Flags specific to clamscan
         if (scanner === 'clamscan') {
             flagsArray.push('--stdout');
-    
+
             // Remove infected files
             if (settings.removeInfected === true) {
                 flagsArray.push('--remove=yes');
             } else {
                 flagsArray.push('--remove=no');
             }
-    
+
             // Database file
             if (
                 'clamscan' in settings &&
@@ -443,260 +442,263 @@ class NodeClam {
                 'db' in settings.clamscan &&
                 settings.clamscan.db &&
                 typeof settings.clamscan.db === 'string'
-            ) flagsArray.push(`--database=${settings.clamscan.db}`);
-    
+            )
+                flagsArray.push(`--database=${settings.clamscan.db}`);
+
             // Scan archives
             if (settings.clamscan.scanArchives === true) {
                 flagsArray.push('--scan-archive=yes');
             } else {
                 flagsArray.push('--scan-archive=no');
             }
-    
+
             // Recursive scanning
             if (settings.scanRecursively === true) {
                 flagsArray.push('-r');
             } else {
                 flagsArray.push('--recursive=no');
             }
-    
+
             // Scan other options: these flags can be added based on settings
             if (settings.clamscan.officialDbOnly !== undefined) {
                 flagsArray.push(`--official-db-only=${settings.clamscan.officialDbOnly ? 'yes' : 'no'}`);
             }
-    
+
             if (settings.clamscan.failIfCvdOlderThan) {
                 flagsArray.push(`--fail-if-cvd-older-than=${settings.clamscan.failIfCvdOlderThan}`);
             }
-    
+
             if (settings.clamscan.allmatch !== undefined) {
                 flagsArray.push(`--allmatch=${settings.clamscan.allmatch ? 'yes' : 'no'}`);
             }
-    
+
             if (settings.clamscan.crossFs !== undefined) {
                 flagsArray.push(`--cross-fs=${settings.clamscan.crossFs ? 'yes' : 'no'}`);
             }
-    
+
             if (settings.clamscan.followDirSymlinks !== undefined) {
                 flagsArray.push(`--follow-dir-symlinks=${settings.clamscan.followDirSymlinks}`);
             }
-    
+
             if (settings.clamscan.followFileSymlinks !== undefined) {
                 flagsArray.push(`--follow-file-symlinks=${settings.clamscan.followFileSymlinks}`);
             }
-    
+
             if (settings.clamscan.excludeRegex) {
                 flagsArray.push(`--exclude=${settings.clamscan.excludeRegex}`);
             }
-    
+
             if (settings.clamscan.excludeDirRegex) {
                 flagsArray.push(`--exclude-dir=${settings.clamscan.excludeDirRegex}`);
             }
-    
+
             if (settings.clamscan.includeRegex) {
                 flagsArray.push(`--include=${settings.clamscan.includeRegex}`);
             }
-    
+
             if (settings.clamscan.includeDirRegex) {
                 flagsArray.push(`--include-dir=${settings.clamscan.includeDirRegex}`);
             }
-    
+
             if (settings.clamscan.bytecode !== undefined) {
                 flagsArray.push(`--bytecode=${settings.clamscan.bytecode ? 'yes' : 'no'}`);
             }
-    
+
             if (settings.clamscan.bytecodeUnsigned !== undefined) {
                 flagsArray.push(`--bytecode-unsigned=${settings.clamscan.bytecodeUnsigned ? 'yes' : 'no'}`);
             }
-    
+
             if (settings.clamscan.bytecodeTimeout) {
                 flagsArray.push(`--bytecode-timeout=${settings.clamscan.bytecodeTimeout}`);
             }
-    
+
             if (settings.clamscan.statistics) {
                 flagsArray.push(`--statistics=${settings.clamscan.statistics}`);
             }
-    
+
             if (settings.clamscan.detectPua !== undefined) {
                 flagsArray.push(`--detect-pua=${settings.clamscan.detectPua ? 'yes' : 'no'}`);
             }
-    
+
             if (settings.clamscan.excludePua) {
                 flagsArray.push(`--exclude-pua=${settings.clamscan.excludePua}`);
             }
-    
+
             if (settings.clamscan.includePua) {
                 flagsArray.push(`--include-pua=${settings.clamscan.includePua}`);
             }
-    
+
             if (settings.clamscan.detectStructured !== undefined) {
                 flagsArray.push(`--detect-structured=${settings.clamscan.detectStructured ? 'yes' : 'no'}`);
             }
-    
+
             if (settings.clamscan.structuredSsnFormat) {
                 flagsArray.push(`--structured-ssn-format=${settings.clamscan.structuredSsnFormat}`);
             }
-    
+
             if (settings.clamscan.structuredSsnCount) {
                 flagsArray.push(`--structured-ssn-count=${settings.clamscan.structuredSsnCount}`);
             }
-    
+
             if (settings.clamscan.structuredCcCount) {
                 flagsArray.push(`--structured-cc-count=${settings.clamscan.structuredCcCount}`);
             }
-    
+
             if (settings.clamscan.structuredCcMode) {
                 flagsArray.push(`--structured-cc-mode=${settings.clamscan.structuredCcMode}`);
             }
-    
+
             if (settings.clamscan.scanMail !== undefined) {
                 flagsArray.push(`--scan-mail=${settings.clamscan.scanMail ? 'yes' : 'no'}`);
             }
-    
+
             if (settings.clamscan.phishingSigs !== undefined) {
                 flagsArray.push(`--phishing-sigs=${settings.clamscan.phishingSigs ? 'yes' : 'no'}`);
             }
-    
+
             if (settings.clamscan.phishingScanUrls !== undefined) {
                 flagsArray.push(`--phishing-scan-urls=${settings.clamscan.phishingScanUrls ? 'yes' : 'no'}`);
             }
-    
+
             if (settings.clamscan.heuristicAlerts !== undefined) {
                 flagsArray.push(`--heuristic-alerts=${settings.clamscan.heuristicAlerts ? 'yes' : 'no'}`);
             }
-    
+
             if (settings.clamscan.heuristicScanPrecedence !== undefined) {
-                flagsArray.push(`--heuristic-scan-precedence=${settings.clamscan.heuristicScanPrecedence ? 'yes' : 'no'}`);
+                flagsArray.push(
+                    `--heuristic-scan-precedence=${settings.clamscan.heuristicScanPrecedence ? 'yes' : 'no'}`
+                );
             }
-    
+
             if (settings.clamscan.normalize !== undefined) {
                 flagsArray.push(`--normalize=${settings.clamscan.normalize ? 'yes' : 'no'}`);
             }
-    
+
             if (settings.clamscan.scanPe !== undefined) {
                 flagsArray.push(`--scan-pe=${settings.clamscan.scanPe ? 'yes' : 'no'}`);
             }
-    
+
             if (settings.clamscan.scanElf !== undefined) {
                 flagsArray.push(`--scan-elf=${settings.clamscan.scanElf ? 'yes' : 'no'}`);
             }
-    
+
             if (settings.clamscan.scanOle2 !== undefined) {
                 flagsArray.push(`--scan-ole2=${settings.clamscan.scanOle2 ? 'yes' : 'no'}`);
             }
-    
+
             if (settings.clamscan.scanPdf !== undefined) {
                 flagsArray.push(`--scan-pdf=${settings.clamscan.scanPdf ? 'yes' : 'no'}`);
             }
-    
+
             if (settings.clamscan.scanSwf !== undefined) {
                 flagsArray.push(`--scan-swf=${settings.clamscan.scanSwf ? 'yes' : 'no'}`);
             }
-    
+
             if (settings.clamscan.scanHtml !== undefined) {
                 flagsArray.push(`--scan-html=${settings.clamscan.scanHtml ? 'yes' : 'no'}`);
             }
-    
+
             if (settings.clamscan.scanXmldocs !== undefined) {
                 flagsArray.push(`--scan-xmldocs=${settings.clamscan.scanXmldocs ? 'yes' : 'no'}`);
             }
-    
+
             if (settings.clamscan.scanHwp3 !== undefined) {
                 flagsArray.push(`--scan-hwp3=${settings.clamscan.scanHwp3 ? 'yes' : 'no'}`);
             }
-    
+
             if (settings.clamscan.scanOnenote !== undefined) {
                 flagsArray.push(`--scan-onenote=${settings.clamscan.scanOnenote ? 'yes' : 'no'}`);
             }
-    
+
             if (settings.clamscan.alertBroken !== undefined) {
                 flagsArray.push(`--alert-broken=${settings.clamscan.alertBroken ? 'yes' : 'no'}`);
             }
-    
+
             if (settings.clamscan.alertEncrypted !== undefined) {
                 flagsArray.push(`--alert-encrypted=${settings.clamscan.alertEncrypted ? 'yes' : 'no'}`);
             }
-    
+
             // Add the missing flags for max options
             if (settings.clamscan.maxScanTime) {
                 flagsArray.push(`--max-scantime=${settings.clamscan.maxScanTime}`);
             }
-    
+
             if (settings.clamscan.maxFileSize) {
                 flagsArray.push(`--max-filesize=${settings.clamscan.maxFileSize}`);
             }
-    
+
             if (settings.clamscan.maxScanSize) {
                 flagsArray.push(`--max-scansize=${settings.clamscan.maxScanSize}`);
             }
-    
+
             if (settings.clamscan.maxFiles) {
                 flagsArray.push(`--max-files=${settings.clamscan.maxFiles}`);
             }
-    
+
             if (settings.clamscan.maxRecursion) {
                 flagsArray.push(`--max-recursion=${settings.clamscan.maxRecursion}`);
             }
-    
+
             if (settings.clamscan.maxDirRecursion) {
                 flagsArray.push(`--max-dir-recursion=${settings.clamscan.maxDirRecursion}`);
             }
-    
+
             if (settings.clamscan.maxEmbeddedPe) {
                 flagsArray.push(`--max-embeddedpe=${settings.clamscan.maxEmbeddedPe}`);
             }
-    
+
             if (settings.clamscan.maxHtmlnormalize) {
                 flagsArray.push(`--max-htmlnormalize=${settings.clamscan.maxHtmlnormalize}`);
             }
-    
+
             if (settings.clamscan.maxHtmlnotags) {
                 flagsArray.push(`--max-htmlnotags=${settings.clamscan.maxHtmlnotags}`);
             }
-    
+
             if (settings.clamscan.maxScriptnormalize) {
                 flagsArray.push(`--max-scriptnormalize=${settings.clamscan.maxScriptnormalize}`);
             }
-    
+
             if (settings.clamscan.maxZipTypercg) {
                 flagsArray.push(`--max-ziptypercg=${settings.clamscan.maxZipTypercg}`);
             }
-    
+
             if (settings.clamscan.maxPartitions) {
                 flagsArray.push(`--max-partitions=${settings.clamscan.maxPartitions}`);
             }
-    
+
             if (settings.clamscan.maxIconspe) {
                 flagsArray.push(`--max-iconspe=${settings.clamscan.maxIconspe}`);
             }
-    
+
             if (settings.clamscan.maxRechwp3) {
                 flagsArray.push(`--max-rechwp3=${settings.clamscan.maxRechwp3}`);
             }
-    
+
             if (settings.clamscan.pcreMatchLimit) {
                 flagsArray.push(`--pcre-match-limit=${settings.clamscan.pcreMatchLimit}`);
             }
-    
+
             if (settings.clamscan.pcreRecMatchLimit) {
                 flagsArray.push(`--pcre-recmatch-limit=${settings.clamscan.pcreRecMatchLimit}`);
             }
-    
+
             if (settings.clamscan.pcreMaxFilesize) {
                 flagsArray.push(`--pcre-max-filesize=${settings.clamscan.pcreMaxFilesize}`);
             }
-    
+
             if (settings.clamscan.disableCache !== undefined) {
                 flagsArray.push(`--disable-cache=${settings.clamscan.disableCache ? 'yes' : 'no'}`);
             }
         }
-    
+
         // Flags specific to clamdscan
         else if (scanner === 'clamdscan') {
             flagsArray.push('--fdpass');
-    
+
             // Remove infected files
             if (settings.removeInfected === true) flagsArray.push('--remove');
-    
+
             // Specify a config file
             if (
                 'clamdscan' in settings &&
@@ -704,19 +706,20 @@ class NodeClam {
                 'configFile' in settings.clamdscan &&
                 settings.clamdscan.configFile &&
                 typeof settings.clamdscan.configFile === 'string'
-            ) flagsArray.push(`--config-file=${settings.clamdscan.configFile}`);
-    
+            )
+                flagsArray.push(`--config-file=${settings.clamdscan.configFile}`);
+
             // Turn on multi-threaded scanning
             if (settings.clamdscan.multiscan === true) flagsArray.push('--multiscan');
-    
+
             // Reload the virus DB
             if (settings.clamdscan.reloadDb === true) flagsArray.push('--reload');
         }
-    
+
         // ***************
         // Common flags
         // ***************
-    
+
         // Remove infected files
         if (settings.removeInfected !== true) {
             if (
@@ -727,29 +730,28 @@ class NodeClam {
                 flagsArray.push(`--move=${settings.quarantineInfected}`);
             }
         }
-    
+
         // Write info to a log
         if ('scanLog' in settings && settings.scanLog && typeof settings.scanLog === 'string')
             flagsArray.push(`--log=${settings.scanLog}`);
-    
+
         // Read list of files to scan from a file
         if ('fileList' in settings && settings.fileList && typeof settings.fileList === 'string')
             flagsArray.push(`--file-list=${settings.fileList}`);
-    
+
         // Scan files specified via --file-list
         if (settings.filesFromList) {
             flagsArray.push('--file-from-list');
         }
-    
+
         // Add timeout for scanning
         if (settings.scanTimeout) {
             flagsArray.push(`--timeout=${settings.scanTimeout}`);
         }
-    
+
         // Return the final flags
         return flagsArray;
     }
-    
 
     /**
      * Create socket connection to a remote(or local) clamav daemon.
@@ -1256,96 +1258,96 @@ class NodeClam {
                 return hasCb ? cb(err, file, null) : reject(err);
             }
 
-                // If user wants to scan via socket or TCP...
-                if (this.settings.clamdscan.socket || this.settings.clamdscan.port || this.settings.clamdscan.host) {
-                    // Scan using local unix domain socket (much simpler/faster process--especially with MULTISCAN enabled)
-                    if (this.settings.clamdscan.socket) {
-                        let client;
+            // If user wants to scan via socket or TCP...
+            if (this.settings.clamdscan.socket || this.settings.clamdscan.port || this.settings.clamdscan.host) {
+                // Scan using local unix domain socket (much simpler/faster process--especially with MULTISCAN enabled)
+                if (this.settings.clamdscan.socket) {
+                    let client;
 
-                        try {
-                            client = await this._initSocket('isInfected');
-                            if (this.settings.debugMode)
-                                console.log(`${this.debugLabel}: scanning with local domain socket now.`);
-
-                            if (this.settings.clamdscan.multiscan === true) {
-                                // Use Multiple threads (faster)
-                                client.write(`MULTISCAN ${file}`);
-                            } else {
-                                // Use single or default # of threads (potentially slower)
-                                client.write(`SCAN ${file}`);
-                            }
-
-                            client.on('data', async (data) => {
-                                if (this.settings.debugMode)
-                                    console.log(
-                                        `${this.debugLabel}: Received response from remote clamd service: `,
-                                        data.toString()
-                                    );
-                                try {
-                                    const result = this._processResult(data.toString(), file);
-                                    if (result instanceof Error) {
-                                        client.end();
-                                        // Throw the error so that its caught and fallback is attempted
-                                        throw result;
-                                    }
-
-                                    client.end();
-                                    const { isInfected, viruses } = result;
-                                    return hasCb
-                                        ? cb(null, file, isInfected, viruses)
-                                        : resolve({ file, isInfected, viruses });
-                                } catch (err) {
-                                    client.end();
-
-                                    // Fallback to local if that's an option
-                                    if (this.settings.clamdscan.localFallback === true) return localScan();
-
-                                    return hasCb ? cb(err, file, null, []) : reject(err);
-                                }
-                            });
-                        } catch (err) {
-                            if (client && 'readyState' in client && client.readyState) client.end();
-
-                            // Fallback to local if that's an option
-                            if (this.settings.clamdscan.localFallback === true) return localScan();
-
-                            return hasCb ? cb(err, file, null, []) : reject(err);
-                        }
-                    }
-
-                    // Scan using remote host/port and TCP protocol (must stream the file)
-                    else {
-                        // Convert file to stream
-                        const stream = fs.createReadStream(file);
-
-                        // Attempt to scan the stream.
-                        try {
-                            const isInfected = await this.scanStream(stream);
-                            return hasCb ? cb(null, file, isInfected, []) : resolve({ ...isInfected, file });
-                        } catch (e) {
-                            // Fallback to local if that's an option
-                            if (this.settings.clamdscan.localFallback === true) return await localScan();
-
-                            // Otherwise, fail
-                            const err = new NodeClamError({ err: e, file }, 'Could not scan file via TCP or locally!');
-                            return hasCb ? cb(err, file, null, []) : reject(err);
-                        } finally {
-                            // Kill file stream on response
-                            stream.destroy();
-                        }
-                    }
-                }
-    
-                // If the user just wants to scan locally...
-                else {
                     try {
-                        return await localScan();
+                        client = await this._initSocket('isInfected');
+                        if (this.settings.debugMode)
+                            console.log(`${this.debugLabel}: scanning with local domain socket now.`);
+
+                        if (this.settings.clamdscan.multiscan === true) {
+                            // Use Multiple threads (faster)
+                            client.write(`MULTISCAN ${file}`);
+                        } else {
+                            // Use single or default # of threads (potentially slower)
+                            client.write(`SCAN ${file}`);
+                        }
+
+                        client.on('data', async (data) => {
+                            if (this.settings.debugMode)
+                                console.log(
+                                    `${this.debugLabel}: Received response from remote clamd service: `,
+                                    data.toString()
+                                );
+                            try {
+                                const result = this._processResult(data.toString(), file);
+                                if (result instanceof Error) {
+                                    client.end();
+                                    // Throw the error so that its caught and fallback is attempted
+                                    throw result;
+                                }
+
+                                client.end();
+                                const { isInfected, viruses } = result;
+                                return hasCb
+                                    ? cb(null, file, isInfected, viruses)
+                                    : resolve({ file, isInfected, viruses });
+                            } catch (err) {
+                                client.end();
+
+                                // Fallback to local if that's an option
+                                if (this.settings.clamdscan.localFallback === true) return localScan();
+
+                                return hasCb ? cb(err, file, null, []) : reject(err);
+                            }
+                        });
                     } catch (err) {
-                        return hasCb ? cb(err, file, null) : reject(err);
+                        if (client && 'readyState' in client && client.readyState) client.end();
+
+                        // Fallback to local if that's an option
+                        if (this.settings.clamdscan.localFallback === true) return localScan();
+
+                        return hasCb ? cb(err, file, null, []) : reject(err);
                     }
                 }
-            });
-        }
+
+                // Scan using remote host/port and TCP protocol (must stream the file)
+                else {
+                    // Convert file to stream
+                    const stream = fs.createReadStream(file);
+
+                    // Attempt to scan the stream.
+                    try {
+                        const isInfected = await this.scanStream(stream);
+                        return hasCb ? cb(null, file, isInfected, []) : resolve({ ...isInfected, file });
+                    } catch (e) {
+                        // Fallback to local if that's an option
+                        if (this.settings.clamdscan.localFallback === true) return await localScan();
+
+                        // Otherwise, fail
+                        const err = new NodeClamError({ err: e, file }, 'Could not scan file via TCP or locally!');
+                        return hasCb ? cb(err, file, null, []) : reject(err);
+                    } finally {
+                        // Kill file stream on response
+                        stream.destroy();
+                    }
+                }
+            }
+
+            // If the user just wants to scan locally...
+            else {
+                try {
+                    return await localScan();
+                } catch (err) {
+                    return hasCb ? cb(err, file, null) : reject(err);
+                }
+            }
+        });
+    }
 
     /**
      * Returns a PassthroughStream object which allows you to
@@ -2610,9 +2612,6 @@ class NodeClam {
             }
         });
     }
-
 }
-
-
 
 module.exports = NodeClam;
